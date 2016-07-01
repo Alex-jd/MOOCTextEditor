@@ -34,6 +34,8 @@ public class DocumentBenchmarking {
 		// You can play around with this.
 		int start = 50000;
 		
+		System.out.println("Size\t" + "BasicDocument\t\t" + "EfficientDocument");
+		
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
 		// instructions and following the pseudocode below.
@@ -42,7 +44,37 @@ public class DocumentBenchmarking {
 		{
 			// numToCheck holds the number of characters that you should read from the 
 			// file to create both a BasicDocument and an EfficientDocument.  
+			double totalTimeBasic = 0;
+			double totalTimeEffic = 0;
+			System.out.print(numToCheck + "\t");
+			String testText = getStringFromFile(textfile, numToCheck);
 			
+			BasicDocument baseDoc = new BasicDocument(testText);
+			EfficientDocument efficDoc = new EfficientDocument(testText);
+
+			
+			for (int i = 0; i < trials; i++) {
+				
+				long startTimeBasic = System.nanoTime();
+				baseDoc.getFleschScore();
+				long endTimeBasic = System.nanoTime();
+				double estTimeBasic = (endTimeBasic - startTimeBasic) / 1000000000.0;
+				totalTimeBasic += estTimeBasic;
+				
+				long startTimeEffic = System.nanoTime();
+				efficDoc.getFleschScore();
+				long endTimeEffic = System.nanoTime();
+				double estTimeEffic = (endTimeEffic - startTimeEffic) / 1000000000.0;
+				totalTimeEffic += estTimeEffic;
+				
+			}
+			
+			System.out.format("%1$.16f", totalTimeBasic );
+			System.out.print("\t");
+			
+			System.out.format("%1$.16f", totalTimeEffic );
+			System.out.println();
+			//System.out.format("%f, %1$+020.10f %n", Math.PI);
 			/* Each time through this loop you should:
 			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
 			 * 2. Read numToCheck characters from the file into a String
