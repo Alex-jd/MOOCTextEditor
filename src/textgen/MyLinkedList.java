@@ -28,18 +28,38 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * Appends an element to the end of the list
 	 * @param element The element to add
 	 */
-	public boolean add(E element ) 
+	public boolean add(E element ) throws IndexOutOfBoundsException, NullPointerException
 	{
 		// TODO: Implement this method
+		if (element == null) {
+			throw new NullPointerException("Last object cannot store null pointers.");
+		}
+		new LLNode<E>(element, tail.prev, tail) ;
+		this.size ++;
+		
 		return false;
 	}
 
 	/** Get the element at position index 
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
-	public E get(int index) 
+	public E get(int index) throws IndexOutOfBoundsException, NullPointerException
 	{
 		// TODO: Implement this method.
-		return null;
+		LLNode<E> node = this.head.next;
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		for (int i = 0; i < index; i++) {
+			node = node.next;
+			if (node.next == null) {
+				break;
+			}
+		}
+		if (node.next == null) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		return node.data;
 	}
 
 	/**
@@ -47,9 +67,44 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @param The index where the element should be added
 	 * @param element The element to add
 	 */
-	public void add(int index, E element ) 
+	public void add(int index, E element ) throws IndexOutOfBoundsException, NullPointerException
 	{
 		// TODO: Implement this method
+		if (element == null) {
+			throw new NullPointerException("Last object cannot store null pointers.");
+		}
+		
+
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		if (index > this.size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		LLNode<E> node = this.head.next;
+		if (index != 0) {
+			for (int i = 0; i < index; i++) {
+				node = node.next;
+				if (node.next == null) {
+					break;
+				}
+			}
+		
+		if (node.next == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		new LLNode<E>(element, node.prev, node.next);
+			
+		}
+		else {
+			new LLNode<E>(element, node.prev, node);
+		}
+		
+				
+		this.size ++;
+
 	}
 
 
@@ -57,7 +112,13 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public int size() 
 	{
 		// TODO: Implement this method
-		return -1;
+		LLNode<E> node = this.head.next;
+		int tempSize = 0;
+		while (node.next != null) {
+			tempSize ++;
+			node = node.next;
+		}
+		return tempSize;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -66,10 +127,33 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException If index is outside the bounds of the list
 	 * 
 	 */
-	public E remove(int index) 
+	public E remove(int index) throws IndexOutOfBoundsException, NullPointerException
 	{
 		// TODO: Implement this method
-		return null;
+		LLNode<E> nodeTemp = new LLNode<E>();
+		LLNode<E> node = this.head.next;
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		for (int i = 0; i < index; i++) {
+			node = node.next;
+			if (node.next == null) {
+				break;
+			}
+		}
+		
+		if (node.next == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		nodeTemp.data = node.data;
+		
+		node.next.prev = node.prev;
+		node.prev.next = node.next;
+		this.size --;
+		
+		return nodeTemp.data;
 	}
 
 	/**
@@ -79,10 +163,32 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @return The element that was replaced
 	 * @throws IndexOutOfBoundsException if the index is out of bounds.
 	 */
-	public E set(int index, E element) 
+	public E set(int index, E element) throws IndexOutOfBoundsException, NullPointerException
 	{
 		// TODO: Implement this method
-		return null;
+		if (element == null) {
+			throw new NullPointerException("Last object cannot store null pointers.");
+		}
+
+		if (index < 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		LLNode<E> nodeTemp = new LLNode<E>();
+		LLNode<E> node = this.head.next;
+		for (int i = 0; i < index; i++) {
+			node = node.next;
+			if (node.next == null) {
+				break;
+			}
+		}
+		
+		if (node.next == null) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		nodeTemp.data = node.data;
+		node.data = element;
+		return nodeTemp.data;
 	}   
 }
 
@@ -99,6 +205,7 @@ class LLNode<E>
 	{
 		this.prev = null;
 		this.next = null;
+		this.data = null;
 	}
 	
 	public LLNode(E e) 
@@ -107,11 +214,14 @@ class LLNode<E>
 
 	}
 	
-	public LLNode(E e, LLNode<E> prevNode) 
+	public LLNode(E e, LLNode<E> prevNode, LLNode<E> nextNode) 
 	{
 		this(e);
 		this.next = prevNode.next;
+		this.prev = this.next.prev;
 		prevNode.next = this;
+		this.next.prev = this;
+		
 	}
 
 }
