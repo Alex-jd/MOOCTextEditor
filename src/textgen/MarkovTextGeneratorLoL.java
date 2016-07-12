@@ -1,9 +1,12 @@
 package textgen;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** 
  * An implementation of the MTG interface that uses a list of lists.
@@ -20,6 +23,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	// The random number generator
 	private Random rnGenerator;
 	
+	private ListNode tempListNode;
+	
 	public MarkovTextGeneratorLoL(Random generator)
 	{
 		wordList = new LinkedList<ListNode>();
@@ -33,6 +38,35 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void train(String sourceText)
 	{
 		// TODO: Implement this method
+		LLNode prevWord = null;
+		LLNode w = null;
+		MyLinkedList<String> tokens = getTokens("[a-zA-Z]+", sourceText);
+		starter = tokens.head.next.data;
+		prevWord = tokens.head.next;
+		for (int i = 0; i <= tokens.size(); i++) {
+			w = prevWord.next;
+			if (w.data != null) {
+				if ( isNode( prevWord.data.toString() ) ) {
+					tempListNode.addNextWord(w.data.toString());
+					System.out.println("train isNode true");
+				}
+				else {
+					tempListNode = new ListNode(prevWord.data.toString());
+					wordList.add(tempListNode);
+					tempListNode.addNextWord(w.data.toString());
+					prevWord = w;
+					System.out.println("train isNode false");
+				}
+			}
+			else {
+				if ( !isNode( prevWord.data.toString() ) ) {
+					tempListNode = new ListNode(prevWord.data.toString());
+					wordList.add(tempListNode);
+					tempListNode.addNextWord(starter);
+				}
+			}
+			
+		}
 	}
 	
 	/** 
@@ -65,7 +99,32 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	}
 	
 	// TODO: Add any private helper methods you need here.
+	protected MyLinkedList<String> getTokens(String pattern, String text)
+	{
+		MyLinkedList<String> tokens = new MyLinkedList<String>();
+		Pattern tokSplitter = Pattern.compile(pattern);
+		Matcher m = tokSplitter.matcher(text);
+		
+		while (m.find()) {
+			tokens.add(m.group());
+		}
+		
+		return tokens;
+	}
 	
+	protected boolean isNode(String word) {
+		
+		for (ListNode n : wordList) {
+			if ( n.getWord() == word ){
+				System.out.println("isNode true");
+				tempListNode = n;
+				return true;
+			}
+		}
+		tempListNode = null;
+		System.out.println("isNode false");
+		return false;
+	}
 	
 	/**
 	 * This is a minimal set of tests.  Note that it can be difficult
