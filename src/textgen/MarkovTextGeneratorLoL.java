@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /** 
  * An implementation of the MTG interface that uses a list of lists.
  * @author UC San Diego Intermediate Programming MOOC team 
@@ -24,6 +25,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	private Random rnGenerator;
 	
 	private ListNode tempListNode;
+	private ListNode lastListNode;
 	
 	public MarkovTextGeneratorLoL(Random generator)
 	{
@@ -42,21 +44,23 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		LLNode w = null;
 		MyLinkedList<String> tokens = getTokens("[a-zA-Z]+", sourceText);
 		starter = tokens.head.next.data;
+		System.out.println(starter.toString());
 		prevWord = tokens.head.next;
 		for (int i = 0; i <= tokens.size(); i++) {
 			w = prevWord.next;
 			if (w.data != null) {
 				if ( isNode( prevWord.data.toString() ) ) {
 					tempListNode.addNextWord(w.data.toString());
-					System.out.println("train isNode true");
+					//System.out.println("train isNode true\n");
 				}
 				else {
+					//System.out.println("Create new ListNode " + prevWord.data.toString());
 					tempListNode = new ListNode(prevWord.data.toString());
 					wordList.add(tempListNode);
 					tempListNode.addNextWord(w.data.toString());
-					prevWord = w;
-					System.out.println("train isNode false");
+					//System.out.println("train isNode FALSE\n");
 				}
+				prevWord = w;
 			}
 			else {
 				if ( !isNode( prevWord.data.toString() ) ) {
@@ -96,6 +100,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void retrain(String sourceText)
 	{
 		// TODO: Implement this method.
+		wordList = new LinkedList<ListNode>();
+		tempListNode = null;
+		starter = null;
+		train(sourceText);
+		
 	}
 	
 	// TODO: Add any private helper methods you need here.
@@ -113,16 +122,16 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	}
 	
 	protected boolean isNode(String word) {
-		
 		for (ListNode n : wordList) {
-			if ( n.getWord() == word ){
-				System.out.println("isNode true");
+			//System.out.println("n.getWord " + n.getWord() + " " + word);
+			if ( n.getWord().equals(word) ){
+				//System.out.println("isNode true");
 				tempListNode = n;
 				return true;
 			}
 		}
 		tempListNode = null;
-		System.out.println("isNode false");
+		//System.out.println("isNode false");
 		return false;
 	}
 	
