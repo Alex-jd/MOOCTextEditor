@@ -42,12 +42,14 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		// TODO: Implement this method
 		String prevWord = null;
 		String w = null;
-		List<String> tokens = getTokens("[a-zA-Z]+", sourceText);
+		List<String> tokens = getTokens("[a-zA-Z.,'!?]+", sourceText);
 		try {
 			//System.out.println(tokens);
 			starter = tokens.get(0);
 			//System.out.println(starter.toString());
-			prevWord = starter;
+			if (starter != null) {
+				prevWord = starter;
+			}
 			for (int i = 0; i < (tokens.size() - 1); i++) {
 				w = tokens.get(i + 1);
 				if ( isNode( prevWord.toString() ) ) {
@@ -71,11 +73,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 					wordList.add(tempListNode);
 					tempListNode.addNextWord(starter);
 				}
-				
 		}
 		catch (IndexOutOfBoundsException e) {
 			
 		}
+		
 		
 	}
 	
@@ -88,7 +90,10 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		String currWord = starter;
 		String output = "";
 		String w = "";
-		output = output + currWord + " ";
+		if (starter != null) {
+			output = output + currWord + " ";
+		}
+		//System.out.println(starter);
 		for (int i = 1; i < numWords; i++) {
 			tempListNode = nodeCorresp(currWord);
 			try {
@@ -98,7 +103,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 				//numWords --;
 			}
 			catch (NullPointerException e) {
-				System.out.println("Error during runtime: " + e);
+				//System.out.println("Error during runtime: " + e);
 				//return null;
 			}
 			
@@ -127,15 +132,15 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	{
 		// TODO: Implement this method.
 		wordList = new LinkedList<ListNode>();
-		//tempListNode = null;
-		//starter = null;
+		tempListNode = null;
+		starter = null;
 		train(sourceText);
 		
 	}
 	
 	// TODO: Add any private helper methods you need here.
 	protected ListNode nodeCorresp (String currWord) {
-		wordList = new LinkedList<ListNode>();
+		//wordList = new LinkedList<ListNode>();
 		try {
 			for (ListNode n : wordList) {
 				//System.out.println(n);
@@ -221,11 +226,13 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		System.out.println(gen);
 		System.out.println(gen.generateText(20));
 		
+		
 		String textEmpty = "";
 		System.out.println(textEmpty);
 		gen.retrain(textEmpty);
 		System.out.println(gen);
 		System.out.println(gen.generateText(10));
+		
 		
 		System.out.println(textString2);
 		gen.retrain(textString2);
