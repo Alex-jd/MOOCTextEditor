@@ -26,6 +26,7 @@ public class DictionaryLL implements Dictionary
     	// TODO: Implement this method
     	//word.toLowerCase();
     	boolean temp = dict.add(word.toLowerCase() );
+    	//System.out.println(temp);
     	if (temp) {
     		return true;
     	}
@@ -40,13 +41,20 @@ public class DictionaryLL implements Dictionary
     public int size()
     {
         // TODO: Implement this method
-        return 0;
+        return dict.size();
     }
 
     /** Is this a word according to this dictionary? */
     public boolean isWord(String s) {
         //TODO: Implement this method
-        return false;
+    	boolean temp = dict.contains(s.toLowerCase() );
+    	if (temp) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+        
     }
 
     
