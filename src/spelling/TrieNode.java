@@ -52,9 +52,12 @@ class TrieNode {
 		if (children.containsKey(c)) {
 			return null;
 		}
-		
+		// else create a new trie node and call constructor with param (String text) for tracking.
+		// And if we've that isWord is true then this Text var contains the Word
 		TrieNode next = new TrieNode(text + c.toString());
+		//Builded method that put the key and value of the key
 		children.put(c, next);
+		// After that we beginning to create a new stem that contains the new nodes 
 		return next;
 	}
 	
