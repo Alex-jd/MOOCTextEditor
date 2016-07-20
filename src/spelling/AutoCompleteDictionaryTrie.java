@@ -15,6 +15,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 
     private TrieNode root;
     private int size;
+    public int temp_true,temp_false;
     
 
     public AutoCompleteDictionaryTrie()
@@ -40,8 +41,33 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
-		word.toLowerCase();
-	    return false;
+		TrieNode currNode = root;
+		TrieNode nextNode;
+		String localWord = word.toLowerCase();
+		//String[] strArr = localWord.split("");
+		for (char c : localWord.toCharArray()) {
+			//System.out.println(c);
+			nextNode = currNode.insert(c);
+			if (nextNode == null) {
+				currNode = currNode.getChild(c);
+				//nextNode = currNode.insert(c);
+			}
+			else {
+				currNode = nextNode;
+			}
+		//printNode(currNode);	
+		}
+		if (!currNode.endsWord() ) {
+			currNode.setEndsWord(true);
+			temp_true ++;
+			return true;
+		}
+		else {
+			//System.out.println(currNode.endsWord());
+			temp_false ++;
+			return false;
+		}
+			    
 	}
 	
 	/** 
@@ -50,10 +76,30 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
+		size = 0;
+		countOfWords(root);
 	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
+	public void countOfWords(TrieNode curr)
+ 	{
+		if (curr == null) 
+ 			return;
+ 		
+ 		if (curr.endsWord()){
+ 			//System.out.println(curr.getText());
+ 			size ++;
+ 		}
+ 		//System.out.println(curr.getText());
+ 		
+ 		TrieNode next = null;
+ 		for (Character c : curr.getValidNextCharacters()) {
+ 			next = curr.getChild(c);
+ 			countOfWords(next);
+ 		}
+ 		
+ 	}
 	
 	/** Returns whether the string is a word in the trie, using the algorithm
 	 * described in the videos for this week. */
@@ -117,7 +163,11 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
  		if (curr == null) 
  			return;
  		
- 		System.out.println(curr.getText());
+ 		if (curr.endsWord()){
+ 			System.out.println(curr.getText());
+ 			//size ++;
+ 		}
+ 		//System.out.println(curr.getText());
  		
  		TrieNode next = null;
  		for (Character c : curr.getValidNextCharacters()) {
