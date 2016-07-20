@@ -107,7 +107,37 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+		TrieNode curr = root;
+		TrieNode nextNode;
+		String localWord = s.toLowerCase();
+		
+		for (char c : localWord.toCharArray()) {
+			nextNode = findWord(curr, c);
+			if (nextNode == null) {
+				return false;
+			}
+			else {
+				curr = nextNode;
+			}
+		}
+		
+		if (curr.endsWord()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	
+	private TrieNode findWord(TrieNode curr, Character c) {
+		for (Character localChar : curr.getValidNextCharacters()) {
+			if (c == localChar) {
+				return curr.getChild(c);
+			}
+		}
+		
+		return null;
 	}
 
 	/** 
