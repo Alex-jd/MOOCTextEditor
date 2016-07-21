@@ -18,7 +18,8 @@ public class TrieGrader {
 
         PrintWriter out;
         try {
-            out = new PrintWriter("output.out");
+        	out = new PrintWriter("grader_output/module4.part2.out");
+            //out = new PrintWriter("output.out");
         } catch (Exception e) {
             e.printStackTrace();
             return;
