@@ -44,10 +44,7 @@ public class AutoCompleteDictionaryTrieTester {
 		smallDict.addWord("subsequent");
 		
 		DictionaryLoader.loadDictionary(largeDict, dictFile);
-		
-		System.out.println ("temp_false:" + largeDict.temp_false + " temp_true:" + largeDict.temp_true + " size:" + largeDict.size());
-		System.out.println("size:" + largeDict.size());
-		//largeDict.printTree();
+
 	}
 
 	
@@ -139,6 +136,7 @@ public class AutoCompleteDictionaryTrieTester {
 		List<String> completions;
 		completions = smallDict.predictCompletions("", 0);
 		assertEquals(0, completions.size());
+		
 		
 		completions = smallDict.predictCompletions("",  4);
 		assertEquals(4, completions.size());

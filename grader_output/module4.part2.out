@@ -40,4 +40,28 @@ Empty string in dictionary: false.
 //TESTING AUTO COMPLETE FUNCTIONALITY (predictCompletions)//
 
 ** Test #12: 3 completions requested...
-Autocomplete returned the following: Error during runtime: java.lang.NullPointerException
+Autocomplete returned the following: dog, doge, dogg, 
+
+** Test #13: Testing size of list...
+predictCompletions returned 3 elements.
+
+** Test #14: 6 completions requested, 0 expected...
+predictCompletions found 0 words.
+
+** Test #15: 10 completions requested, 6 expected...
+predictCompletions found 6 elements.
+
+** Test #16: Testing for correctness of 6 words...
+Words returned by predictCompletions: dogg, doggo, doggie, doggos, doggies, doggoes, 
+
+** Test #17: 7 completions requested (test for size)...
+predictCompletions returned 7 elements.
+
+** Test #18: Testing if list is sorted from shortest to longest...
+Check above output.
+
+** Test #19: Testing if list contains correct shorter words...
+Check above output.
+
+** Test #20: Testing for remaining words...
+Out of 'testone', 'testine', 'testell', and 'testing', 2 words were found.

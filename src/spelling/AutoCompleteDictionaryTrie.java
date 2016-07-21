@@ -1,6 +1,7 @@
 package spelling;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
@@ -167,6 +168,43 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 // This method should implement the following algorithm:
     	 // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
     	 //    empty list
+    	List<String> CompletionsList = new LinkedList<String>();//empty returned linkedlist
+    	Queue<TrieNode> q = new LinkedList<TrieNode>();//empty queue
+    	String lowCasePrefix = prefix.toLowerCase();
+    	TrieNode curr = root;
+ 
+ 		if (curr.getText() != lowCasePrefix) {
+  			for (char c : lowCasePrefix.toCharArray()) {
+ 				TrieNode nextNode = findWord(curr, c);
+ 	 			if (nextNode == null) {
+ 	 				return CompletionsList;
+ 	 			}
+ 	 			else {
+ 	 				curr = nextNode;
+ 	 			}
+ 			}
+ 		}
+ 		
+ 		q.add(curr);
+ 		int i = 0;
+ 		while(!q.isEmpty() && i < numCompletions) {
+ 			TrieNode tempCurr = q.remove();// get first TrieNode from queue
+ 			if (tempCurr.endsWord() ) {
+ 				CompletionsList.add(tempCurr.getText() ); //Add to CompletionsList word if that node has a word (endsWord is true)
+ 				i++;
+  			}
+ 			try {
+ 				for (char c : tempCurr.getValidNextCharacters() ) {
+ 					q.add(tempCurr.getChild(c)); //Add to queue children if they are
+ 				}
+ 			}
+ 			catch (NullPointerException e) {
+  			}
+ 		
+ 		}
+ 		
+ 		 return CompletionsList;
+
     	 // 2. Once the stem is found, perform a breadth first search to generate completions
     	 //    using the following algorithm:
     	 //    Create a queue (LinkedList) and add the node that completes the stem to the back
@@ -178,7 +216,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
     	 
-         return null;
+        
      }
 
  	// For debugging
@@ -193,10 +231,10 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
  		if (curr == null) 
  			return;
  		
- 		if (curr.endsWord()){
+ 		//if (curr.endsWord()){
  			System.out.println(curr.getText());
  			//size ++;
- 		}
+ 		//}
  		//System.out.println(curr.getText());
  		
  		TrieNode next = null;
