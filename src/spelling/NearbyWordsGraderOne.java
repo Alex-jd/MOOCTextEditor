@@ -21,6 +21,7 @@ public class NearbyWordsGraderOne {
         try {
             Dictionary d = new DictionaryHashSet();
             DictionaryLoader.loadDictionary(d, "test_cases/dict.txt");
+            //DictionaryLoader.loadDictionary(d, "data/dict.txt");
             NearbyWords nw = new NearbyWords(d);
 
             List<String> d1 = nw.distanceOne("word", true);
@@ -33,10 +34,11 @@ public class NearbyWordsGraderOne {
                 feedback += i + ", ";
             }
 
+            /*
             feedback += "\n** Test 3: distanceOne list size (allowing non-words)... ";
             d1 = nw.distanceOne("word", false);
             feedback += "distanceOne with non-words returned " + d1.size() + " words.\n";
-            
+            */
             d1 = new ArrayList<String>();
             
             feedback += "** Test 4: deletions list size... ";
